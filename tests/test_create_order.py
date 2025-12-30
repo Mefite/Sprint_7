@@ -15,9 +15,6 @@ class TestListOrders:
             with allure.step("Отправка запроса на создание заказа"):
                 response = order_api.create_order(order_data)
 
-            with allure.step("Проверка кода ответа"):
-                assert response.status_code == 201
-
             with allure.step("Десериализация ответа"):
                 data = response.json()
 

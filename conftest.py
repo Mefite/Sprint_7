@@ -1,6 +1,5 @@
 import pytest
 from API.client_api import ClientApi
-
 from API.courier_api import CourierApi
 from API.order_api import OrderApi
 from helpers import register_new_courier_and_return_login_password

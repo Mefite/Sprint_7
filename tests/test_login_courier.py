@@ -1,6 +1,6 @@
 import pytest
 import allure
-from data import CreateCourierData
+from data import CreateCourierData, ResponseText
 
 class TestCourierLogin:
 
@@ -23,21 +23,25 @@ class TestCourierLogin:
         "description, creds, expected_status, expected_message",
         [
             ("Неправильный логин",
-             {"login": "wrong_login", "password": CreateCourierData.LOGIN_COURIER["password"]},
-             404, "Учетная запись не найдена"),
+             {"login": CreateCourierData.INVALID_COURIER["login"], 
+              "password": CreateCourierData.LOGIN_COURIER["password"]},
+             404, ResponseText.NOT_FOUND),
             ("Неправильный пароль",
-             {"login": CreateCourierData.LOGIN_COURIER["login"], "password": "wrong_pass"},
-             404, "Учетная запись не найдена"),
+             {"login": CreateCourierData.LOGIN_COURIER["login"], 
+              "password": CreateCourierData.INVALID_COURIER["password"]},
+             404, ResponseText.NOT_FOUND),
             ("Без логина",
-             {"password": CreateCourierData.LOGIN_COURIER["password"]},
-             400, "Недостаточно данных для входа"),
+             {"login": CreateCourierData.WITHOUT_LOGIN["login"],
+              "password": CreateCourierData.WITHOUT_LOGIN["password"]}, 
+             400, ResponseText.NO_DATA_LOGIN),
             ("Без пароля",
-             {"login": CreateCourierData.LOGIN_COURIER["login"]},
-             400, "Недостаточно данных для входа"),
+             {"login": CreateCourierData.WITHOUT_PASSWORD["login"],
+              "password": CreateCourierData.WITHOUT_PASSWORD["password"]}, 
+             400, ResponseText.NO_DATA_LOGIN),
             ("Несуществующий пользователь",
              {"login": CreateCourierData.NO_EXIST_USER["login"],
               "password": CreateCourierData.NO_EXIST_USER["password"]},
-             404, "Учетная запись не найдена")
+             404, ResponseText.NOT_FOUND)
         ])
     @allure.title("Негативная авторизация курьера")
     @allure.description("Проверка авторизации негативными сценариями")
